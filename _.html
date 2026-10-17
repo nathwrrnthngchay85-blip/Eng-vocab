@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Y2K Vocab Party</title>
+<link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;600&family=Pixelify+Sans:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--pink:#ff8fd8;--hot:#ff4fb8;--lav:#c9a7ff;--blue:#8fd8ff;--mint:#a8ffdc;--yel:#fff38f;--ink:#5a2a7a}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+button{touch-action:manipulation}
+body{font-family:'Mitr',sans-serif;color:var(--ink);min-height:100vh;overflow-x:hidden;
+  background:linear-gradient(120deg,#ffd6f2,#e2d1ff,#c9f0ff,#fff5c9,#ffd6f2);background-size:400% 400%;animation:bgMove 18s ease infinite}
+@keyframes bgMove{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+
+.grid{position:fixed;left:-50%;right:-50%;bottom:-10%;height:55vh;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,79,184,.35) 2px,transparent 2px),linear-gradient(90deg,rgba(255,79,184,.35) 2px,transparent 2px);
+  background-size:60px 60px;transform:perspective(400px) rotateX(60deg);transform-origin:bottom;animation:gridMove 2.5s linear infinite;
+  -webkit-mask-image:linear-gradient(to top,#000 30%,transparent);mask-image:linear-gradient(to top,#000 30%,transparent)}
+@keyframes gridMove{to{background-position:0 60px}}
+#floaters{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.fl{position:absolute;bottom:-80px;animation:floatUp linear infinite;pointer-events:none}
+@keyframes floatUp{0%{transform:translateY(0) rotate(0)}50%{transform:translateY(-60vh) translateX(30px) rotate(180deg)}100%{transform:translateY(-125vh) rotate(360deg)}}
+.bubble{border-radius:50%;background:radial-gradient(circle at 30% 30%,#fff 0 10%,rgba(255,255,255,.35) 22%,rgba(201,167,255,.35) 55%,rgba(143,216,255,.5) 80%,rgba(255,143,216,.6));border:1px solid rgba(255,255,255,.9)}
+.star{color:#fff;text-shadow:0 0 8px var(--hot),0 0 14px var(--lav)}
+
+.marquee{position:relative;z-index:2;overflow:hidden;white-space:nowrap;background:linear-gradient(90deg,var(--hot),var(--lav),var(--blue));color:#fff;font-family:'Pixelify Sans',sans-serif;padding:5px 0;font-size:14px;pointer-events:none}
+.marquee span{display:inline-block;padding-left:100%;animation:mq 22s linear infinite}
+@keyframes mq{to{transform:translateX(-100%)}}
+
+.wrap{position:relative;z-index:5;max-width:780px;margin:auto;padding:16px 14px 70px}
+h1{font-family:'Pixelify Sans',sans-serif;text-align:center;font-size:clamp(30px,7vw,52px);color:#fff;
+  text-shadow:3px 3px 0 var(--hot),6px 6px 0 var(--lav);letter-spacing:2px;animation:wobble 3s ease-in-out infinite}
+@keyframes wobble{50%{transform:rotate(-2deg) scale(1.03)}}
+.sub{text-align:center;margin:6px 0 16px;font-size:14px}
+
+.win{background:rgba(255,255,255,.85);border:3px solid #fff;border-radius:18px;box-shadow:6px 6px 0 var(--pink);margin-bottom:16px;overflow:hidden}
+.bar{background:linear-gradient(90deg,var(--pink),var(--lav),var(--blue));color:#fff;font-family:'Pixelify Sans',sans-serif;padding:6px 12px;display:flex;justify-content:space-between;align-items:center;font-size:15px;text-shadow:1px 1px 0 var(--hot)}
+.dots span{display:inline-block;width:12px;height:12px;border-radius:50%;background:#fff;margin-left:5px;border:2px solid var(--hot)}
+.body{padding:14px}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--lav);background:#fff;border-radius:999px;padding:8px 12px;cursor:pointer;font-family:inherit;font-size:13px;color:var(--ink);transition:.2s}
+.chip.on{background:linear-gradient(135deg,var(--pink),var(--lav));color:#fff;border-color:#fff;box-shadow:0 0 0 2px var(--hot)}
+.modes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(min-width:640px){.modes{grid-template-columns:repeat(6,1fr)}}
+.mode{font-family:inherit;font-size:13px;padding:12px 4px;border-radius:14px;border:2px solid #fff;cursor:pointer;color:var(--ink);
+  background:linear-gradient(180deg,#fff,#f1e6ff);box-shadow:0 3px 0 var(--lav);transition:.15s}
+.mode.on{background:linear-gradient(180deg,#ffd1f0,var(--pink));color:#fff;box-shadow:0 3px 0 var(--hot);transform:translateY(-2px)}
+.stats{display:flex;justify-content:space-around;align-items:center;font-family:'Pixelify Sans',sans-serif;font-size:18px;flex-wrap:wrap;gap:6px}
+.stats small{font-family:'Mitr',sans-serif;font-size:12px;display:block;text-align:center}
+
+.btn{font-family:inherit;font-size:16px;border:none;border-radius:999px;padding:12px 22px;cursor:pointer;color:#fff;
+  background:linear-gradient(180deg,#ffb3e6,var(--hot));box-shadow:inset 0 3px 0 rgba(255,255,255,.6),0 4px 0 #c2338a;transition:transform .1s}
+.btn:active{transform:translateY(3px)}
+.btn.blue{background:linear-gradient(180deg,#c4ecff,#5cb8ff);box-shadow:inset 0 3px 0 rgba(255,255,255,.6),0 4px 0 #2f86c9}
+.btn.mint{background:linear-gradient(180deg,#c8ffe9,#3fd69c);box-shadow:inset 0 3px 0 rgba(255,255,255,.6),0 4px 0 #22a173}
+.btn.gray{background:linear-gradient(180deg,#eee6ff,#a98be0);box-shadow:inset 0 3px 0 rgba(255,255,255,.6),0 4px 0 #7a5cb3}
+.btn.small{padding:8px 14px;font-size:14px}
+.row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.mini{border:none;background:#fff;border-radius:50%;width:42px;height:42px;font-size:18px;cursor:pointer;box-shadow:0 3px 0 var(--lav);margin-top:8px}
+.progress{text-align:center;font-size:14px;margin-bottom:10px;opacity:.85}
+
+.flip{perspective:1000px;height:250px;cursor:pointer;margin:4px auto 10px;max-width:440px}
+.inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.flip.flipped .inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;text-align:center;border:3px solid #fff;box-shadow:0 8px 24px rgba(201,167,255,.5)}
+.front{background:linear-gradient(135deg,#ffe0f5,#e8dcff)}
+.back{background:linear-gradient(135deg,#d6f4ff,#dfffee);transform:rotateY(180deg)}
+.flip:not(.flipped) .back,.flip.flipped .front{pointer-events:none}
+.big{font-size:clamp(26px,6vw,40px);font-weight:600;margin:8px 0;line-height:1.25}
+.big.th{font-size:clamp(22px,5vw,32px)}
+.pos{background:var(--yel);padding:2px 10px;border-radius:999px;font-size:13px}
+.tap{margin-top:8px;opacity:.6}
+
+.qcard{text-align:center;padding:18px;border-radius:20px;background:linear-gradient(135deg,#ffe8f7,#ece2ff);border:3px solid #fff;margin-bottom:14px}
+.opts{display:grid;gap:10px}
+.opts.two{grid-template-columns:1fr 1fr}
+.opt{padding:14px;border-radius:14px;border:2px solid var(--lav);background:#fff;font-family:inherit;font-size:16px;color:var(--ink);cursor:pointer;text-align:left;transition:.15s}
+.opts.two .opt{text-align:center;font-weight:600}
+.opt:hover:not(:disabled){background:#fff0fa}
+.opt.ok{background:var(--mint);border-color:#2bc28a}
+.opt.no{background:#ffc2d1;border-color:#ff4f7b;animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.timer{height:9px;background:#fff;border-radius:9px;overflow:hidden;margin-bottom:12px;border:2px solid #fff}
+.timer i{display:block;height:100%;background:linear-gradient(90deg,var(--hot),var(--yel),var(--mint));animation:tick linear forwards}
+@keyframes tick{from{width:100%}to{width:0}}
+input.typ{width:100%;padding:14px;font-size:20px;border-radius:14px;border:3px dashed var(--lav);font-family:inherit;text-align:center;outline:none;color:var(--ink);background:#fff}
+input.typ:focus{border-color:var(--hot)}
+input.okI{background:var(--mint);border-style:solid}
+input.noI{background:#ffd3de;border-style:solid;animation:shake .4s}
+.hint{font-family:monospace;font-size:20px;letter-spacing:3px;min-height:26px;color:var(--hot)}
+.feedback{margin-top:12px;text-align:center;font-size:17px;min-height:26px}
+.speaker{font-size:54px;width:110px;height:110px;border-radius:50%;border:4px solid #fff;cursor:pointer;
+  background:radial-gradient(circle at 30% 30%,#fff,var(--blue) 60%,var(--lav));box-shadow:0 6px 0 #7aa9e0;animation:pulse 1.6s infinite}
+@keyframes pulse{50%{transform:scale(1.07)}}
+
+table.mt{width:100%;border-collapse:separate;border-spacing:0 8px}
+.mt td{background:#fff;padding:10px;border-radius:12px;vertical-align:middle}
+.mt td.mean{width:50%;font-size:15px}
+.slot{min-height:46px;border:2px dashed var(--pink);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#c79bd8;cursor:pointer;transition:.15s;text-align:center;padding:4px}
+.slot.over{background:#fff0fa;transform:scale(1.03);border-color:var(--hot)}
+.slot.matched{border:2px solid #2bc28a;background:var(--mint);color:var(--ink);font-weight:600;font-size:15px}
+.slot.bad{animation:shake .4s;background:#ffd3de}
+.pool{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px;padding:12px;border-radius:14px;background:rgba(255,255,255,.55);border:2px dashed #fff;min-height:60px}
+.word{padding:10px 15px;border-radius:999px;background:linear-gradient(135deg,#fff,#e8dcff);border:2px solid var(--lav);cursor:grab;user-select:none;-webkit-user-select:none;font-weight:600;touch-action:none;transition:transform .15s}
+.word.sel{box-shadow:0 0 0 3px var(--hot);transform:scale(1.08)}
+.ghost{position:fixed;pointer-events:none;transform:translate(-50%,-50%) rotate(-5deg) scale(1.1);z-index:999;box-shadow:0 8px 20px rgba(255,79,184,.4)}
+
+.finish{text-align:center}
+.finish h2{font-family:'Pixelify Sans',sans-serif;font-size:30px;color:var(--hot)}
+.review{text-align:left;background:#fff;border-radius:14px;padding:12px;margin-top:12px;max-height:280px;overflow:auto}
+.review div{padding:6px 0;border-bottom:1px dashed var(--lav);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.review button{border:none;background:none;cursor:pointer;font-size:16px}
+
+.spark{position:fixed;left:50%;top:45%;font-size:24px;pointer-events:none;z-index:1000;animation:boom .9s ease-out forwards}
+@keyframes boom{from{transform:translate(-50%,-50%) scale(.3);opacity:1}to{transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1.2) rotate(200deg);opacity:0}}
+#err{display:none;position:fixed;left:10px;right:10px;bottom:10px;z-index:2000;background:#ffd3de;border:3px solid var(--hot);border-radius:14px;padding:10px;font-size:13px;word-break:break-all}
+</style>
+</head>
+<body>
+<div class="grid"></div>
+<div id="floaters"></div>
+<div class="marquee"><span>✧ welcome 2 my vocab page ✧ ☆ study hard, play harder ☆ ♡ คำศัพท์วันละนิด จิตแจ่มใส ♡ ✿ y2k vibes only ✿ 💿 keep calm &amp; memorize 💿</span></div>
+
+<div class="wrap">
+  <h1>✧ Vocab Party ✧</h1>
+  <p class="sub">♡ เลือกเซ็ต → เลือกโหมด → ลุยเลย! ♡</p>
+
+  <div class="win"><div class="bar"><span>📊 stats.exe</span><span class="dots"><span></span><span></span><span></span></span></div>
+    <div class="body stats">
+      <div>⭐ <span id="sScore">0</span><small>คะแนน</small></div>
+      <div>🔥 <span id="sStreak">0</span><small>คอมโบ</small></div>
+      <div>🎯 <span id="sAcc">-</span><small>ความแม่นยำ</small></div>
+      <div>👑 <span id="sBest">0</span><small>คอมโบสูงสุด</small></div>
+      <button class="mini" id="sndBtn" title="เสียงเอฟเฟกต์">🔔</button>
+    </div>
+  </div>
+
+  <div class="win"><div class="bar"><span>📁 vocab_sets.exe</span><span class="dots"><span></span><span></span><span></span></span></div>
+    <div class="body chips" id="sets"></div>
+  </div>
+
+  <div class="win"><div class="bar"><span>🎮 game_mode.exe</span><span class="dots"><span></span><span></span><span></span></span></div>
+    <div class="body modes" id="modes"></div>
+  </div>
+
+  <div class="win"><div class="bar"><span id="modeTitle">play.exe</span><span class="dots"><span></span><span></span><span></span></span></div>
+    <div class="body" id="stage"><p style="text-align:center">กำลังโหลด... ถ้าข้อความนี้ไม่หายไป แปลว่าเบราว์เซอร์ไม่ได้รันสคริปต์ ลองเปิดด้วย Chrome หรือ Safari นะ</p></div>
+  </div>
+</div>
+<div id="err"></div>
+
+<script>
+/* แสดงข้อผิดพลาดบนจอ (ไว้ช่วยหาสาเหตุ) */
+window.addEventListener('error',function(e){var b=document.getElementById('err');b.style.display='block';b.textContent='⚠️ Error: '+e.message+' (บรรทัด '+e.lineno+')'});
+
+/* ================== คำศัพท์ ================== */
+const SETS=[
+{icon:"🌟",th:"ความสามารถ & ความยอดเยี่ยม",words:[
+["Outstanding","adj.","โดดเด่น, ยอดเยี่ยม"],["Successful","adj.","ประสบความสำเร็จ"],["An extraordinary","adj.","ไม่ธรรมดา, พิเศษมาก"],
+["Exceptional","adj.","ยอดเยี่ยมมาก, เหนือกว่าปกติ"],["Brilliant","adj.","ฉลาดมาก, ยอดเยี่ยม"],["Brilliance","n.","ความอัจฉริยะ, ความยอดเยี่ยม"],
+["Skill","n.","ทักษะ"],["Skilled","adj.","ที่มีทักษะ"],["Talent for","n.","พรสวรรค์ในเรื่อง..."],["Talented at","adj.","มีพรสวรรค์ใน..."],
+["Able to","adj. phrase","สามารถ..."],["Ability to","n.","ความสามารถในการ..."],["Potential","n./adj.","ศักยภาพ, มีศักยภาพ"]]},
+{icon:"🏆",th:"กีฬา & การแข่งขัน",words:[
+["Represent","v.","เป็นตัวแทน"],["World record","n.","สถิติโลก"],["Lead","v.","นำ, เป็นผู้นำ"],["Referee","n.","ผู้ตัดสิน"],
+["Was/were awarded","v.","ได้รับรางวัล"],["Spectator","n.","ผู้ชม, คนดู"],["Cheer","v.","ส่งเสียงเชียร์, ให้กำลังใจ"],["Pitch","n.","สนามกีฬา"],
+["Opposing team","n.","ทีมคู่แข่ง"],["Technique","n.","เทคนิค, วิธีการ"],["Beat","v.","เอาชนะ"],["Compete","v.","แข่งขัน"],
+["Competition","n.","การแข่งขัน"],["Competitor","n.","คู่แข่ง"],["Competitive","adj.","ที่มีการแข่งขันสูง/ชอบแข่งขัน"],
+["Victory","n.","ชัยชนะ"],["Champion","n.","แชมป์/ผู้ชนะเลิศ"],["Sportspeople","n.","นักกีฬา"]]},
+{icon:"📈",th:"บรรยายข้อมูล & แนวโน้ม",words:[
+["Increase","n.","การเพิ่มขึ้น"],["Decrease","n.","การลดลง"],["Boost","n.","การกระตุ้น/การเพิ่มขึ้น"],
+["Noticeable / Dramatic","adj.","เห็นได้ชัด / มากอย่างรวดเร็ว"],["Obvious / Significant","adj.","ชัดเจน / มีนัยสำคัญ"],
+["Gradual / Slight","adj.","ค่อยเป็นค่อยไป / เล็กน้อย"],["Has/have increased","v.","ได้เพิ่มขึ้น"],["Has/have decreased","v.","ได้ลดลง"],
+["Dramatically","adv.","อย่างมาก"]]},
+{icon:"🔗",th:"สาเหตุ & ผลกระทบ",words:[
+["Affect","v.","ส่งผลกระทบ"],["An effect on","n.","ผลกระทบต่อ"],["Lead to","v.","นำไปสู่"],["Cause","v.","ก่อให้เกิด"],
+["To be caused by","v.","เกิดจาก"],["Result in","v.","ส่งผลให้"],["A result of","n.","ผลลัพธ์ของ"]]},
+{icon:"💪",th:"ความยาก & ความท้าทาย",words:[
+["Demanding","adj.","ต้องการความพยายามและความทุ่มเทสูง"],["Exhausting","adj.","ทำให้เหนื่อยล้า"],["Backbreaking","adj.","หนักหน่วง, ทำให้เหนื่อยมาก"],
+["Gruelling","adj.","ทรมาน, เหนื่อยแทบขาดใจ"],["Punishing","adj.","เหนื่อยหนัก, ทรมาน"],["Arduous","adj.","ยากลำบาก, ต้องใช้ความพยายามมาก"],
+["Rigorous","adj.","เข้มงวด, ละเอียดถี่ถ้วน"],["Strict","adj.","เข้มงวด"],["Tricky","adj.","ยาก, มีเล่ห์เหลี่ยม"],["Tough","adj.","ยาก, แข็งแกร่ง"],
+["Testing","adj.","ท้าทาย, ทดสอบความสามารถ"],["Struggle","n./v.","ความยากลำบาก, ดิ้นรน"],["Challenged","adj.","ถูกท้าทาย, พบกับอุปสรรค"],
+["Stretch","n./v.","ทำให้ตึง, ขยายขีดจำกัด"],["Delicate","adj.","เปราะบาง, อ่อนไหว"],["Awkward","adj.","อึดอัด, งุ่มง่าม"]]},
+{icon:"📘",th:"ไวยากรณ์: บังคับ & อนุญาต",words:[
+["To be supposed to","v.","ควรจะ, ถูกคาดหวังให้"],["To be forced to","v.","ถูกบังคับให้"],["To be allowed to","v.","ได้รับอนุญาตให้"],
+["Let","v.","อนุญาต, ปล่อยให้"],["Make","v.","บังคับให้, ทำให้"],["Straightforward","adj.","ตรงไปตรงมา, เข้าใจง่าย"]]}
+];
+const ALL=SETS.flatMap((s,i)=>s.words.map(([w,p,m])=>({w,p,m,set:i})));
+
+/* ================== ตัวช่วย ================== */
+const $=s=>document.querySelector(s);
+const stage=$('#stage');
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.random()*a.length|0];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ที่เก็บข้อมูลแบบปลอดภัย: ถ้าใช้ไม่ได้ เกมก็ยังเล่นได้ */
+const store={
+  get(k){try{return window.localStorage.getItem(k)}catch(e){return null}},
+  set(k,v){try{window.localStorage.setItem(k,v)}catch(e){}}
+};
+
+let selected=new Set(SETS.map((_,i)=>i)), mode='flip', timers=[], quiz=null;
+let score=0,streak=0,correct=0,total=0,best=+(store.get('y2kBest')||0),sfx=true;
+const pool=()=>ALL.filter(x=>selected.has(x.set));
+const clearT=()=>{timers.forEach(clearTimeout);timers=[]};
+
+/* ===== เสียงพูด ===== */
+let voices=[];
+const hasTTS=()=>{try{return 'speechSynthesis' in window && typeof SpeechSynthesisUtterance!=='undefined'}catch(e){return false}};
+function loadV(){try{voices=speechSynthesis.getVoices()||[]}catch(e){voices=[]}}
+if(hasTTS()){loadV();try{speechSynthesis.onvoiceschanged=loadV}catch(e){}}
+function stopSpeak(){if(hasTTS()){try{speechSynthesis.cancel()}catch(e){}}}
+function speak(t,rate=.9){
+  if(!hasTTS())return;
+  try{
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(t.replace(/\s*\/\s*/g,' or ').replace(/\.\.\./g,''));
+    u.lang='en-US';u.rate=rate;
+    const v=voices.find(v=>/en[-_]US/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang));
+    if(v)u.voice=v;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-say]');if(b){e.stopPropagation();speak(b.dataset.say)}});
+
+/* ===== เสียงเอฟเฟกต์ ===== */
+let ac=null;
+function beep(ok){
+  if(!sfx)return;
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+    ac=ac||new AC();if(ac.state==='suspended')ac.resume();
+    const o=ac.createOscillator(),g=ac.createGain(),t=ac.currentTime;
+    o.type='triangle';o.frequency.setValueAtTime(ok?880:260,t);o.frequency.exponentialRampToValueAtTime(ok?1500:140,t+.18);
+    g.gain.setValueAtTime(.15,t);g.gain.exponentialRampToValueAtTime(.001,t+.28);
+    o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+.3);
+  }catch(e){}
+}
+$('#sndBtn').addEventListener('click',()=>{sfx=!sfx;$('#sndBtn').textContent=sfx?'🔔':'🔕'});
+
+function burst(n=14){
+  for(let i=0;i<n;i++){
+    const s=document.createElement('div');s.className='spark';
+    s.textContent=pick(['✦','★','♡','✿','✧','💖','⭐','🦋']);
+    const a=Math.random()*Math.PI*2,d=80+Math.random()*160;
+    s.style.setProperty('--x',Math.cos(a)*d+'px');s.style.setProperty('--y',Math.sin(a)*d+'px');
+    s.style.color=pick(['#ff4fb8','#c9a7ff','#5cb8ff','#ffd400','#3fd69c']);
+    document.body.appendChild(s);setTimeout(()=>s.remove(),950);
+  }
+}
+function reward(ok){
+  total++;
+  if(ok){correct++;streak++;score+=10+Math.min(streak,10)*2;burst(streak>=5?22:12);
+    if(streak>best){best=streak;store.set('y2kBest',best)}}
+  else streak=0;
+  beep(ok);upd();
+}
+function upd(){$('#sScore').textContent=score;$('#sStreak').textContent=streak;$('#sBest').textContent=best;
+  $('#sAcc').textContent=total?Math.round(correct/total*100)+'%':'-'}
+
+function distract(c,n,key){
+  const seen=new Set([c[key]]),out=[];
+  for(const src of [shuffle(ALL.filter(x=>x.set===c.set)),shuffle(ALL)])
+    for(const x of src){if(out.length>=n)break;if(!seen.has(x[key])){seen.add(x[key]);out.push(x)}}
+  return out;
+}
+const norm=s=>s.toLowerCase().replace(/\.\.\./g,'').replace(/\s*\/\s*/g,'/').replace(/\s+/g,' ').trim();
+function accepts(w){
+  const n=norm(w),a=new Set([n]);
+  if(/^(an?|to be) /.test(n))a.add(n.replace(/^(an?|to be) /,''));
+  const m=n.match(/^(\w+)\/(\w+) (.+)$/);
+  if(m){a.add(m[1]+' '+m[3]);a.add(m[2]+' '+m[3])}
+  else if(n.includes('/'))n.split('/').forEach(x=>a.add(x.trim()));
+  return a;
+}
+const hintOf=w=>w.split('').map((ch,i)=>/[a-z]/i.test(ch)?(i===0||/[\s\/]/.test(w[i-1])?ch:'_'):ch).join('');
+
+/* ================== โหมด ================== */
+const MODES={flip:'🃏 Flip Card',choice:'⚡ 4 ตัวเลือก',type:'⌨️ พิมพ์คำ',match:'🧩 จับคู่',listen:'🎧 ฟังแล้วเลือก',mix:'🔀 มิกซ์'};
+
+function start(m){
+  mode=m;clearT();quiz=null;stopSpeak();
+  document.querySelectorAll('.mode').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
+  $('#modeTitle').textContent=MODES[m]+'.exe';
+  if(m==='flip')startFlip();else if(m==='match')startMatch();else startQuiz(m);
+}
+
+function finish(right,tot,wrong,again,label='ตอบถูก'){
+  clearT();
+  const pct=right/tot, em=pct===1?'👑':pct>=.8?'💖':pct>=.5?'✨':'🌱';
+  const uniq=[...new Set(wrong)];
+  stage.innerHTML=`<div class="finish"><div class="big">${em}</div><h2>จบรอบแล้ว!</h2>
+  <p style="font-size:18px">${label} <b>${right}/${tot}</b></p>
+  ${uniq.length?`<div class="review"><b>📌 คำที่ควรทบทวน</b>${uniq.map(c=>`<div><button data-say="${esc(c.w)}">🔊</button><b>${c.w}</b> <i>(${c.p})</i> — ${c.m}</div>`).join('')}</div>`
+  :'<p>เพอร์เฟกต์! ไม่พลาดเลยสักคำ 💖</p>'}
+  <div class="row"><button class="btn" id="again">🔁 เล่นอีกรอบ</button><button class="btn blue" id="rnd">🎲 สุ่มโหมดใหม่</button></div></div>`;
+  burst(30);
+  $('#again').addEventListener('click',again);
+  $('#rnd').addEventListener('click',()=>start(pick(Object.keys(MODES).filter(k=>k!==mode))));
+}
+
+/* ---------- 1) Flip Card ---------- */
+function startFlip(){
+  let q=shuffle(pool()),known=0,first=0;const tot=q.length,miss=new Set();
+  const draw=()=>{
+    if(!q.length)return finish(first,tot,[...miss],startFlip,'จำได้ตั้งแต่ครั้งแรก');
+    const c=q[0];
+    stage.innerHTML=`<div class="progress">🃏 เหลือ ${q.length} ใบ · จำได้แล้ว ${known}/${tot}</div>
+    <div class="flip" id="fc"><div class="inner">
+      <div class="face front"><span class="pos">${c.p}</span><div class="big">${c.w}</div><button class="mini" data-say="${esc(c.w)}">🔊</button><small class="tap">แตะการ์ดเพื่อพลิก ↻</small></div>
+      <div class="face back"><span class="pos">${c.p}</span><div class="big th">${c.m}</div><small>${c.w}</small></div>
+    </div></div>
+    <div class="row"><button class="btn gray" id="no">😵 จำไม่ได้</button><button class="btn mint" id="yes">😎 จำได้</button></div>`;
+    const fc=$('#fc');
+    fc.addEventListener('click',e=>{if(e.target.closest('[data-say]'))return;fc.classList.toggle('flipped')});
+    $('#yes').addEventListener('click',()=>{q.shift();known++;if(!miss.has(c))first++;reward(true);draw()});
+    $('#no').addEventListener('click',()=>{q.shift();miss.add(c);q.splice(Math.min(q.length,2+(Math.random()*3|0)),0,c);streak=0;beep(false);upd();draw()});
+  };
+  draw();
+}
+
+/* ---------- Quiz runner ---------- */
+function startQuiz(type){
+  clearT();
+  quiz={type,list:shuffle(pool()).slice(0,10),i:0,right:0,wrong:[]};
+  showQ();
+}
+function showQ(){
+  clearT();const q=quiz;if(!q)return;
+  if(q.i>=q.list.length)return finish(q.right,q.list.length,q.wrong,()=>startQuiz(q.type));
+  const c=q.list[q.i],t=q.type==='mix'?pick(['choice','type','listen']):q.type;
+  const head=`<div class="progress">ข้อ ${q.i+1}/${q.list.length}${q.type==='mix'?' · '+MODES[t]:''}</div>`;
+  ({choice:qChoice,type:qType,listen:qListen})[t](c,head);
+}
+function answer(c,ok){if(quiz){ok?quiz.right++:quiz.wrong.push(c)}reward(ok)}
+function nextQ(ms){timers.push(setTimeout(()=>{if(quiz){quiz.i++;showQ()}},ms))}
+
+/* ---------- 2) 4 ตัวเลือก ---------- */
+function qChoice(c,head){
+  const opts=shuffle([c,...distract(c,3,'m')]),SEC=12;
+  stage.innerHTML=head+`<div class="timer"><i style="animation-duration:${SEC}s"></i></div>
+  <div class="qcard"><span class="pos">${c.p}</span><div class="big">${c.w}</div><button class="mini" data-say="${esc(c.w)}">🔊</button></div>
+  <div class="opts">${opts.map((o,k)=>`<button class="opt" data-k="${k}">${'ABCD'[k]}. ${o.m}</button>`).join('')}</div>
+  <div class="feedback" id="fb"></div>`;
+  let done=false;
+  const end=k=>{
+    if(done)return;done=true;clearT();
+    const ok=k!=null&&opts[k]===c;
+    stage.querySelectorAll('.opt').forEach((b,j)=>{b.disabled=true;if(opts[j]===c)b.classList.add('ok');else if(j===k)b.classList.add('no')});
+    const ti=stage.querySelector('.timer i');if(ti)ti.style.animationPlayState='paused';
+    $('#fb').innerHTML=ok?pick(['🎉 เก่งมาก!','💖 ถูกต้อง!','✨ สุดยอด!','⭐ เป๊ะมาก!']):(k==null?'⏰ หมดเวลา! ':'💔 ยังไม่ใช่นะ ')+`→ <b>${c.m}</b>`;
+    answer(c,ok);nextQ(ok?900:1900);
+  };
+  stage.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>end(+b.dataset.k)));
+  timers.push(setTimeout(()=>end(null),SEC*1000));
+}
+
+/* ---------- 3) พิมพ์คำศัพท์ ---------- */
+function qType(c,head){
+  stage.innerHTML=head+`<div class="qcard"><span class="pos">${c.p}</span><div class="big th">${c.m}</div><div class="hint" id="hint"></div></div>
+  <input class="typ" id="inp" placeholder="พิมพ์คำศัพท์ภาษาอังกฤษ..." autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+  <div class="row"><button class="btn gray small" id="hb">💡 คำใบ้</button><button class="btn" id="ck">ตรวจคำตอบ ✨</button></div>
+  <div class="feedback" id="fb"></div>`;
+  const inp=$('#inp');let done=false;
+  try{inp.focus({preventScroll:true})}catch(e){}
+  $('#hb').addEventListener('click',()=>{$('#hint').textContent=hintOf(c.w)+`  (${c.w.replace(/[^a-z]/gi,'').length} ตัว)`});
+  const check=()=>{
+    if(done){if(quiz){quiz.i++;showQ()}return}
+    if(!inp.value.trim())return;
+    done=true;const ok=accepts(c.w).has(norm(inp.value));
+    inp.disabled=true;inp.classList.add(ok?'okI':'noI');
+    $('#fb').innerHTML=ok?`🎉 สะกดถูกต้อง! <b>${c.w}</b>`:`💔 คำที่ถูกคือ <b>${c.w}</b><br><small>คุณพิมพ์: ${esc(inp.value)}</small>`;
+    speak(c.w);answer(c,ok);
+    $('#ck').textContent='ข้อต่อไป ➜';
+  };
+  $('#ck').addEventListener('click',check);
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();check()}});
+}
+
+/* ---------- 5) ฟังแล้วเลือก ---------- */
+function qListen(c,head){
+  const opts=shuffle([c,...distract(c,3,'w')]);
+  stage.innerHTML=head+`<div class="qcard"><button class="speaker" id="sp">🔊</button>
+  <div class="row"><button class="btn blue small" id="slow">🐢 ฟังช้า ๆ</button></div>
+  <p style="margin-top:8px"><small>แตะลำโพงเพื่อฟัง แล้วเลือกคำที่ได้ยิน</small></p>
+  ${hasTTS()?'':'<p style="color:#ff4f7b"><small>⚠️ เบราว์เซอร์นี้ไม่รองรับเสียงอ่าน ลองใช้ Chrome หรือ Safari</small></p>'}</div>
+  <div class="opts two">${opts.map((o,k)=>`<button class="opt" data-k="${k}">${o.w}</button>`).join('')}</div>
+  <div class="feedback" id="fb"></div>`;
+  $('#sp').addEventListener('click',()=>speak(c.w));
+  $('#slow').addEventListener('click',()=>speak(c.w,.5));
+  timers.push(setTimeout(()=>speak(c.w),350));
+  let done=false;
+  stage.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{
+    if(done)return;done=true;const k=+b.dataset.k,ok=opts[k]===c;
+    stage.querySelectorAll('.opt').forEach((x,j)=>{x.disabled=true;if(opts[j]===c)x.classList.add('ok');else if(j===k)x.classList.add('no')});
+    $('#fb').innerHTML=`${ok?'🎧 หูดีมาก!':'💔 คำที่ได้ยินคือ'} <b>${c.w}</b> <i>(${c.p})</i> = ${c.m}`;
+    answer(c,ok);nextQ(ok?1500:2400);
+  }));
+}
+
+/* ---------- 4) จับคู่ (ลาก/แตะ) ---------- */
+function makeDraggable(el,onDrop,onTap){
+  el.addEventListener('pointerdown',e=>{
+    if(e.button!==undefined&&e.button!==0)return;
+    e.preventDefault();
+    const sx=e.clientX,sy=e.clientY;let ghost=null;
+    const under=ev=>{const t=document.elementFromPoint(ev.clientX,ev.clientY);return t?t.closest('.slot:not(.matched)'):null};
+    const clean=()=>{
+      window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',cancel);
+      document.querySelectorAll('.slot.over').forEach(s=>s.classList.remove('over'));
+      if(ghost){ghost.remove();el.style.opacity=''}
+    };
+    const move=ev=>{
+      if(!ghost&&Math.hypot(ev.clientX-sx,ev.clientY-sy)>6){
+        ghost=el.cloneNode(true);ghost.classList.add('ghost');document.body.appendChild(ghost);el.style.opacity=.3}
+      if(ghost){ghost.style.left=ev.clientX+'px';ghost.style.top=ev.clientY+'px';
+        document.querySelectorAll('.slot.over').forEach(s=>s.classList.remove('over'));
+        const t=under(ev);if(t)t.classList.add('over')}
+    };
+    const up=ev=>{const dragged=!!ghost;const t=dragged?under(ev):null;clean();if(dragged){if(t)onDrop(t)}else onTap()};
+    const cancel=()=>clean();
+    window.addEventListener('pointermove',move);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',cancel);
+  });
+}
+function startMatch(){
+  clearT();
+  const items=shuffle(pool()).slice(0,6);let sel=null,matched=0;const miss=new Set();
+  stage.innerHTML=`<div class="progress">🧩 ลากคำศัพท์ไปวางให้ตรงความหมาย (หรือแตะคำ แล้วแตะช่อง)</div>
+  <table class="mt">${items.map((c,i)=>`<tr><td class="mean">${c.m}<br><small style="opacity:.6">${c.p}</small></td><td><div class="slot" data-i="${i}">วางตรงนี้ ✧</div></td></tr>`).join('')}</table>
+  <div class="pool">${shuffle(items.map((_,i)=>i)).map(i=>`<div class="word" data-i="${i}">${items[i].w}</div>`).join('')}</div>`;
+  const tryDrop=(w,slot)=>{
+    if(slot.classList.contains('matched'))return;
+    const c=items[+slot.dataset.i];
+    if(w.dataset.i===slot.dataset.i){
+      slot.classList.add('matched');slot.textContent='✔ '+c.w;w.remove();matched++;
+      reward(true);speak(c.w);
+      if(matched===items.length)timers.push(setTimeout(()=>finish(items.length-miss.size,items.length,[...miss],startMatch,'จับคู่ถูกตั้งแต่ครั้งแรก'),900));
+    }else{
+      miss.add(items[+w.dataset.i]);reward(false);
+      slot.classList.add('bad');setTimeout(()=>slot.classList.remove('bad'),400);
+    }
+    if(sel){sel.classList.remove('sel');sel=null}
+  };
+  stage.querySelectorAll('.word').forEach(w=>makeDraggable(w,s=>tryDrop(w,s),()=>{
+    if(sel)sel.classList.remove('sel');
+    sel=sel===w?null:w;if(sel)sel.classList.add('sel');
+  }));
+  stage.querySelectorAll('.slot').forEach(s=>s.addEventListener('click',()=>{if(sel)tryDrop(sel,s)}));
+}
+
+/* ================== UI เริ่มต้น ================== */
+function renderSets(){
+  const all=selected.size===SETS.length;
+  $('#sets').innerHTML=`<button class="chip ${all?'on':''}" data-s="all">💫 ทั้งหมด (${ALL.length})</button>`+
+    SETS.map((s,i)=>`<button class="chip ${selected.has(i)&&!all?'on':''}" data-s="${i}">${s.icon} ${i+1}. ${s.th} (${s.words.length})</button>`).join('');
+}
+$('#sets').addEventListener('click',e=>{
+  const b=e.target.closest('.chip');if(!b)return;
+  const v=b.dataset.s,all=selected.size===SETS.length;
+  if(v==='all')selected=new Set(SETS.map((_,i)=>i));
+  else{const i=+v;
+    if(all)selected=new Set([i]);
+    else{selected.has(i)?selected.delete(i):selected.add(i);if(!selected.size)selected.add(i)}}
+  renderSets();start(mode);
+});
+$('#modes').innerHTML=Object.entries(MODES).map(([k,v])=>`<button class="mode" data-m="${k}">${v}</button>`).join('');
+$('#modes').addEventListener('click',e=>{const b=e.target.closest('.mode');if(b)start(b.dataset.m)});
+
+/* พื้นหลังลอยได้ */
+(function(){
+  const f=$('#floaters');
+  for(let i=0;i<26;i++){
+    const d=document.createElement('div');
+    if(i%2){const s=20+Math.random()*55;d.className='fl bubble';d.style.width=d.style.height=s+'px'}
+    else{d.className='fl star';d.textContent=pick(['✦','★','♡','✿','✧','💿','🦋','⭐','🌸','💖']);d.style.fontSize=(16+Math.random()*24)+'px'}
+    d.style.left=Math.random()*100+'%';
+    d.style.animationDuration=(12+Math.random()*18)+'s';
+    d.style.animationDelay=(-Math.random()*25)+'s';
+    f.appendChild(d);
+  }
+})();
+
+renderSets();upd();start('flip');
+</script>
+</body>
+</html>
